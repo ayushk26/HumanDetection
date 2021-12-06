@@ -14,7 +14,7 @@ def humanDetection():
     previous_count = 0
     itr = 0
     ct =0
-    previous_count_ct =0
+    previous_count_ct = 0
 
     while True:
         ct = 0
@@ -24,7 +24,7 @@ def humanDetection():
         ret,frame = cap.read()
         gray = cv.cvtColor(frame,cv.COLOR_BGR2GRAY)
         humans = human_cascade.detectMultiScale(gray,1.9,1)
-        boxes, weights = hog.detectMultiScale(frame, winStride=(8, 8))
+        boxes, weights = hog.detectMultiScale(gray, winStride=(4, 4), scale = 1.03)
         boxes = np.array([[x, y, x + w, y + h] for (x, y, w, h) in boxes])
 
         ct = len(boxes)
@@ -45,13 +45,13 @@ def humanDetection():
         if previous_count_ct < ct:
             previous_count_ct = ct
 
-        if (itr == 50):
+        if (itr == 25):
             previous_count = n_humans
             previous_count_ct = ct
             itr = 0
 
-        final_count =0
-        if (previous_count_ct >previous_count):
+        final_count = 0
+        if (previous_count_ct > previous_count):
             final_count = previous_count_ct
         else:
             final_count = previous_count
